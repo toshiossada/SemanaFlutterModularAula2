@@ -40,17 +40,11 @@ class _HomePageState extends State<HomePage> {
               itemCount: list.length,
               itemBuilder: (_, index) {
                 return ListTile(
-                  title: Text(list[index]),
+                  title: Text(list[index].name),
                 );
               },
             );
           }
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.adjust),
-        onPressed: () {
-          //Modular.to.pushNamed('/other/${_homeController.text}');
         },
       ),
     );

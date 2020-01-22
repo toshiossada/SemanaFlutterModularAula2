@@ -1,5 +1,6 @@
 import 'package:aula_0/app/pages/home/home_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,18 +18,39 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('HOME'),
       ),
-      body: Center(
-        child: TextField(
-          onChanged: (value) {
-            _homeController.text = value;
-          },
-          decoration: InputDecoration(labelText: 'Digite seu nome'),
-        ),
+      body: Observer(
+        builder: (_) {
+          if (_homeController.pokemons.error != null) {
+            return Center(
+              child: RaisedButton(
+                onPressed: () {
+                  _homeController.fetchPokemons();
+                },
+                child: Text('Press Again'),
+              ),
+            );
+          } else if (_homeController.pokemons.value == null) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            var list = _homeController.pokemons.value;
+
+            return ListView.builder(
+              itemCount: list.length,
+              itemBuilder: (_, index) {
+                return ListTile(
+                  title: Text(list[index]),
+                );
+              },
+            );
+          }
+        },
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.adjust),
         onPressed: () {
-          Modular.to.pushNamed('/other/${_homeController.text}');
+          //Modular.to.pushNamed('/other/${_homeController.text}');
         },
       ),
     );
